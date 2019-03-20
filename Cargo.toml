@@ -1,0 +1,11 @@
+[package]
+name = "cap"
+version = "0.1.0"
+authors = ["Clark Kampfe <clark.kampfe@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+dirs = "1.0.5"
+rusqlite = "0.17.0"
+structopt = "0.2.15"
+time = "0.1.42"

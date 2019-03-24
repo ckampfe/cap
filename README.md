@@ -18,12 +18,15 @@ You can make your own database in any other location, and then alias `cap` to sp
 your custom location like `cap -l /some/other/location/cap.db`. The name of the db is
 not significant, and is only a default.
 
-You can then query your database like:
+
+You can then view your data with [cap_viewer](https://github.com/ckampfe/cap_viewer) (a simple webapp) or
+query it like:
 
 ```
 $ sqlite3 ~/cap.db
 sqlite> SELECT * FROM entries
 ```
+
 
 The schema of the entries table is:
 

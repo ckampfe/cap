@@ -13,18 +13,8 @@ struct Options {
     #[structopt(short = "l", long = "database-location", parse(from_str))]
     db_location: Option<PathBuf>,
 
-    #[structopt(short = "r", long = "recent-entries")]
-    recent_entries: Option<i64>,
-
     #[structopt()]
     entry: Option<String>,
-}
-
-#[derive(Debug)]
-struct Entry {
-    id: i32,
-    body: String,
-    created_at: time::Timespec,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -60,32 +50,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
 
     conn.execute("INSERT INTO entries (body) VALUES (?1)", &[entry])?;
-
-    if let Some(n_entries_to_echo) = options.recent_entries {
-        let mut select_star = conn.prepare(
-            "SELECT * FROM entries
-                 ORDER BY created_at DESC
-                 LIMIT ?;",
-        )?;
-
-        let entries = select_star.query_map(&[n_entries_to_echo], |row| {
-            Ok(Entry {
-                id: row.get(0)?,
-                body: row.get(1)?,
-                created_at: row.get(2)?,
-            })
-        })?;
-
-        for entry in entries {
-            let e = &(entry?);
-            println!(
-                "{:?}, {:?}, {:?}",
-                e.id,
-                e.body,
-                time::strftime("%FT%TZ", &time::at_utc(e.created_at))?
-            );
-        }
-    }
 
     Ok(())
 }

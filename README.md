@@ -64,7 +64,6 @@ FLAGS:
 
 OPTIONS:
     -l, --database-location <db_location>
-    -r, --recent-entries <recent_entries>
 
 ARGS:
     <entry>

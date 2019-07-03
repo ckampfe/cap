@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 dirs = "1.0"
-rusqlite = "0.17"
+rusqlite = "0.19"
 structopt = "0.2"
 time = "0.1"
 

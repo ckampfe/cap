@@ -3,6 +3,8 @@ cap
 
 Quickly capture stream-of-thought text to a timestamped sqlite database.
 
+[![CircleCI](https://circleci.com/gh/ckampfe/cap.svg?style=svg)](https://circleci.com/gh/ckampfe/cap)
+
 ## use
 
 ```

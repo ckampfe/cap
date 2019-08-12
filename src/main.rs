@@ -1,9 +1,10 @@
 use dirs;
-use rusqlite::{Connection, NO_PARAMS};
+use rusqlite::{params, Connection, LoadExtensionGuard, NO_PARAMS};
 use std::boxed::Box;
 use std::error::Error;
 use std::io;
 use std::io::Read;
+use std::path::Path;
 use std::path::PathBuf;
 use structopt::*;
 
@@ -16,6 +17,12 @@ struct Options {
     #[structopt()]
     entry: Option<String>,
 }
+
+struct HashChainValue {
+    value: Vec<u8>,
+}
+
+const SHATHREE_LOCATION: &str = "/usr/local/lib/shathree";
 
 fn main() -> Result<(), Box<dyn Error>> {
     let options = Options::from_args();
@@ -31,12 +38,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
 
     let conn = Connection::open(db_location)?;
+    let _guard = LoadExtensionGuard::new(&conn)?;
+    conn.load_extension(Path::new(SHATHREE_LOCATION), None)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS entries (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         body TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        hash BLOB
     );",
         NO_PARAMS,
     )?;
@@ -49,7 +59,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         entry_buf
     };
 
-    conn.execute("INSERT INTO entries (body) VALUES (?1)", &[entry])?;
+    let row_hash = conn.query_row(
+        "SELECT sha3(id || body || created_at || COALESCE(hash, \"\"))
+         FROM entries
+         ORDER BY created_at DESC
+         LIMIT 1",
+        NO_PARAMS,
+        |row| Ok(HashChainValue { value: row.get(0)? }),
+    )?;
+
+    conn.execute(
+        "INSERT INTO entries (body, hash) VALUES (?1, ?2)",
+        params![entry, row_hash.value],
+    )?;
 
     Ok(())
 }

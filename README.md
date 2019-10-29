@@ -40,14 +40,13 @@ CREATE TABLE IF NOT EXISTS entries (
 )
 ```
 
-## building
+## install
 
 ```
 $ brew install sqlite
 $ git clone git@github.com:ckampfe/cap.git
 $ cd cap
-$ cargo build --release
-$ ln -s ~/code/cap/target/release/cap /usr/local/bin # or wherever on your path
+$ cargo install --path . --force
 ```
 
 ## help

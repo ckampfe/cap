@@ -4,8 +4,7 @@ use std::boxed::Box;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use std::path::Path;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use structopt::*;
 
 #[derive(Clone, Debug, StructOpt)]

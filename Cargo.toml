@@ -10,7 +10,7 @@ structopt = "0.3"
 time = "0.1"
 
 [dependencies.rusqlite]
-version = "0.20.0"
+version = "0.21"
 features = ["bundled", "load_extension"]
 
 [profile.release]

@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 dirs = "2.0"
 structopt = "0.3"
-time = "0.1"
+time = "0.2"
 
 [dependencies.rusqlite]
 version = "0.21"

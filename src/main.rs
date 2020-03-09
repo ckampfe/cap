@@ -17,9 +17,7 @@ struct Options {
     entry: Option<String>,
 }
 
-struct HashChainValue {
-    value: Vec<u8>,
-}
+struct HashChainValue(Vec<u8>);
 
 const SHATHREE_LOCATION: &str = "/usr/local/lib/shathree";
 
@@ -64,12 +62,12 @@ fn main() -> Result<(), Box<dyn Error>> {
          ORDER BY created_at DESC
          LIMIT 1",
         NO_PARAMS,
-        |row| Ok(HashChainValue { value: row.get(0)? }),
+        |row| Ok(HashChainValue(row.get(0)?)),
     )?;
 
     conn.execute(
         "INSERT INTO entries (body, hash) VALUES (?1, ?2)",
-        params![entry, row_hash.value],
+        params![entry, row_hash.0],
     )?;
 
     Ok(())
